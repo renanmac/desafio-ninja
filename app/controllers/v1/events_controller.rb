@@ -20,7 +20,9 @@ module V1
       end
     end
 
-    def show; end
+    def show
+      render json: @event
+    end
 
     def update
       if @event.update(events_params)

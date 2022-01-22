@@ -54,6 +54,26 @@ RSpec.describe V1::EventsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    it 'Should returns an event' do
+      event = Event.create(
+        start_at: '01-12-2022 09:00',
+        end_at: '01-12-2022 10:00',
+        owner_email: 'ninja@mail.com',
+        title: 'Evento Legal',
+        schedule_id: schedules(:getninjas).id,
+        room_id: rooms(:subzero).id
+      )
+
+      get :show, params: { schedule_id: schedules(:getninjas).id, id: event.id }
+
+      json_response = JSON.parse(response.body)
+
+      expect(response).to have_http_status(200)
+      expect(json_response['id']).to eq(event.id)
+    end
+  end
+
   describe 'PUT #update' do
     let(:event) {
       Event.create(

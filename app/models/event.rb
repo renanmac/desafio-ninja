@@ -7,6 +7,8 @@ class Event < ApplicationRecord
             :title,
             presence: true
 
+  validates :owner_email, format: { with: URI::MailTo::EMAIL_REGEXP } 
+
   validate :end_at_after_start_at,
            :business_hours,
            :in_the_past,
