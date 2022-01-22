@@ -21,8 +21,10 @@ ActiveRecord::Schema.define(version: 2022_01_20_164541) do
     t.boolean "all_day"
     t.string "owner_email"
     t.bigint "schedule_id", null: false
+    t.bigint "room_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["room_id"], name: "index_events_on_room_id"
     t.index ["schedule_id"], name: "index_events_on_schedule_id"
   end
 
@@ -43,6 +45,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_164541) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "events", "rooms"
   add_foreign_key "events", "schedules"
   add_foreign_key "rooms", "schedules"
 end

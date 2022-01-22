@@ -6,6 +6,7 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.boolean :all_day
       t.string :owner_email
       t.references :schedule, null: false, foreign_key: true
+      t.references :room, null: false, foreign_key: true
 
       t.timestamps
     end
