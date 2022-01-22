@@ -39,19 +39,24 @@ class Event < ApplicationRecord
   end
 
   def booking_conflict
+    query = booking_conflict_query
+
     self
       .class
       .where(room_id: room_id)
       .where.not(id: id)
-      .exists?(
-        [
-          '(start_at IN (:start, :end) OR end_at IN (:start, :end)) OR (start_at <= :start AND end_at >= :end)',
-          { start: start_at, end: end_at }
-        ]
-      )
+      .exists?([query, { start: start_at, end: end_at }])
   end
 
   private
+
+  def booking_conflict_query
+    <<~SQL.squish
+      (end_at BETWEEN :start AND :end) OR
+      (start_at BETWEEN :start AND :end) OR
+      (start_at <= :start AND end_at >= :end)
+    SQL
+  end
 
   def within_schedule?
     schedule.within_time_limits?(start_at) && schedule.within_time_limits?(end_at)

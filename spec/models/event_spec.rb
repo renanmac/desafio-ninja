@@ -56,7 +56,7 @@ RSpec.describe Event, type: :model do
     expect(event.errors.messages[:business_hours].first).to eq('O horário do evento está fora do horário comercial')
   end
 
-  it 'Should not overbooking' do
+  it 'Should not create nested events' do
     start_at = 4.days.from_now
     end_at = start_at + 2.hours
 
@@ -64,6 +64,19 @@ RSpec.describe Event, type: :model do
     event1.save!
 
     event = build_event(start_at + 10.minutes, start_at + 1.hour)
+
+    expect(event.save).to be false
+    expect(event.errors.messages[:booking_conflict].first).to eq('Já existe um evento na sala/horário selecionados')
+  end
+
+  it 'Should not create overlapping events' do
+    start_at = 4.days.from_now
+    end_at = start_at + 2.hours
+
+    event1 = build_event(start_at, end_at)
+    event1.save!
+
+    event = build_event(start_at + 1.hour, start_at + 3.hours)
 
     expect(event.save).to be false
     expect(event.errors.messages[:booking_conflict].first).to eq('Já existe um evento na sala/horário selecionados')
