@@ -20,6 +20,7 @@ RSpec.describe V1::EventsController, type: :controller do
           owner_email: 'ninja@mail.com',
           start_at: '01-12-2022 09:00',
           end_at: '01-12-2022 10:00',
+          title: 'Evento Legal',
           room_id: rooms(:subzero).id
         }
       }
@@ -39,6 +40,7 @@ RSpec.describe V1::EventsController, type: :controller do
         event: {
           start_at: '01-12-2022 09:00',
           end_at: '01-12-2022 10:00',
+          title: 'Evento Legal',
           room_id: rooms(:subzero).id
         }
       }
@@ -58,6 +60,7 @@ RSpec.describe V1::EventsController, type: :controller do
         start_at: '01-12-2022 09:00',
         end_at: '01-12-2022 10:00',
         owner_email: 'ninja@mail.com',
+        title: 'Evento Legal',
         schedule_id: schedules(:getninjas).id,
         room_id: rooms(:subzero).id
       )
@@ -115,6 +118,7 @@ RSpec.describe V1::EventsController, type: :controller do
         start_at: '01-12-2022 09:00',
         end_at: '01-12-2022 10:00',
         owner_email: 'ninja@mail.com',
+        title: 'Evento Legal',
         schedule_id: schedules(:getninjas).id,
         room_id: rooms(:subzero).id
       )

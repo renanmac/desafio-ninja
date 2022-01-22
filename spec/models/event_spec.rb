@@ -14,6 +14,7 @@ RSpec.describe Event, type: :model do
       start_at: start_at,
       end_at: end_at,
       owner_email: 'ninja@mail.com',
+      title: 'Evento Legal',
       schedule_id: schedules(:getninjas).id,
       room_id: rooms(:subzero).id
     )

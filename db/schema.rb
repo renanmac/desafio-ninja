@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_164541) do
   create_table "events", force: :cascade do |t|
     t.datetime "start_at", precision: 6
     t.datetime "end_at", precision: 6
-    t.boolean "all_day"
+    t.string "title"
     t.string "owner_email"
     t.bigint "schedule_id", null: false
     t.bigint "room_id", null: false

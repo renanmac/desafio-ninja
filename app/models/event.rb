@@ -1,9 +1,10 @@
 class Event < ApplicationRecord
   belongs_to :schedule
 
-  validates :start_at,
+  validates :owner_email,
+            :start_at,
             :end_at,
-            :owner_email,
+            :title,
             presence: true
 
   validate :end_at_after_start_at,

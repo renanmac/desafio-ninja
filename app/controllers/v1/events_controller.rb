@@ -43,7 +43,7 @@ module V1
     end
 
     def events_params
-      params.require(:event).permit(:start_at, :end_at, :owner_email, :schedule_id, :room_id)
+      params.require(:event).permit(:start_at, :end_at, :owner_email, :title, :schedule_id, :room_id)
     end
 
     def set_schedule
