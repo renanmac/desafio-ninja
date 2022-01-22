@@ -1,16 +1,29 @@
 class Event < ApplicationRecord
   belongs_to :schedule
 
-  validate :business_hours,
+  validates :start_at,
+            :end_at,
+            :owner_email,
+            presence: true
+
+  validate :end_at_after_start_at,
+           :business_hours,
            :in_the_past,
            :same_day,
-           :weekend,
-           :availability
+           :weekend
+
+  validates_with AvailabilityValidator
 
   def business_hours
     return if within_schedule?
 
     errors.add(:business_hours, 'O horário do evento está fora do horário comercial')
+  end
+
+  def end_at_after_start_at
+    return if end_at > start_at
+
+    errors.add(:end_at, 'A data de término do evento deve ser maior que a data de início')
   end
 
   def weekend
@@ -32,31 +45,7 @@ class Event < ApplicationRecord
     errors.add(:in_the_past, 'Eventos não podem ser criados no passado')
   end
 
-  def availability
-    return unless booking_conflict
-
-    errors.add(:booking_conflict, 'Já existe um evento na sala/horário selecionados')
-  end
-
-  def booking_conflict
-    query = booking_conflict_query
-
-    self
-      .class
-      .where(room_id: room_id)
-      .where.not(id: id)
-      .exists?([query, { start: start_at, end: end_at }])
-  end
-
   private
-
-  def booking_conflict_query
-    <<~SQL.squish
-      (end_at BETWEEN :start AND :end) OR
-      (start_at BETWEEN :start AND :end) OR
-      (start_at <= :start AND end_at >= :end)
-    SQL
-  end
 
   def within_schedule?
     schedule.within_time_limits?(start_at) && schedule.within_time_limits?(end_at)
