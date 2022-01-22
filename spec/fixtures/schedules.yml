@@ -1,0 +1,5 @@
+getninjas:
+  name: 'GetNinjas'
+  description: 'Calendário do GetNinjas'
+  open_time: '09:00'
+  close_time: '18:00'
