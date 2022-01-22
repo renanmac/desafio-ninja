@@ -4,6 +4,11 @@ RSpec.describe Event, type: :model do
   fixtures :schedules
   fixtures :rooms
 
+  before(:all) do
+    time = Time.zone.parse('2021-01-03 12:00:00')
+    Timecop.travel(time)
+  end
+
   def build_event(start_at, end_at)
     described_class.new(
       start_at: start_at,
@@ -58,7 +63,7 @@ RSpec.describe Event, type: :model do
     event1 = build_event(start_at, end_at)
     event1.save!
 
-    event = build_event(start_at + 10.minutes, start + 1.hour)
+    event = build_event(start_at + 10.minutes, start_at + 1.hour)
 
     expect(event.save).to be false
     expect(event.errors.messages[:booking_conflict].first).to eq('Já existe um evento na sala/horário selecionados')
