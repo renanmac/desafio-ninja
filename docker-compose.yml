@@ -16,4 +16,3 @@ services:
       - db
     environment:
       DB_HOST: db
-      RAILS_ENV: 'development'

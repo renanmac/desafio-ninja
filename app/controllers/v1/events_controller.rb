@@ -2,6 +2,7 @@ module V1
   class EventsController < ApplicationController
     before_action :set_schedule
     before_action :set_event, only: %i[show update destroy]
+    before_action :date_params_validation, only: %i[create update]
 
     def index
       @events = Event.all
@@ -15,7 +16,7 @@ module V1
       if @event.save
         render json: @event, status: :created
       else
-        render json: @event.errors, status: :unprocessable_entity
+        render json: { errors: @event.errors }, status: :unprocessable_entity
       end
     end
 
@@ -25,7 +26,7 @@ module V1
       if @event.update(events_params)
         render json: @event
       else
-        render json: @event.errors, status: :unprocessable_entity
+        render json: { errors: @event.errors }, status: :unprocessable_entity
       end
     end
 
@@ -35,8 +36,14 @@ module V1
 
     private
 
+    def date_params_validation
+      events_params.slice(:start_at, :end_at).each { |_, date| Time.zone.parse(date) }
+    rescue ArgumentError
+      render json: { errors: { date: ['Data informada está em um formato inválido'] } }, status: :bad_request
+    end
+
     def events_params
-      params.require(:event).permit(:start_at, :end_at, :schedule_id, :room_id)
+      params.require(:event).permit(:start_at, :end_at, :owner_email, :schedule_id, :room_id)
     end
 
     def set_schedule
